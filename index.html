@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatt app</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script >
+        const name=prompt()
+        var socket=io();
+        socket.emit("new-user-joined",name) 
+
+    </script>
+</head>
+<body>
+    <h1>chat room</h1>
+    
+        <input id="inputbox" type="text"/>
+        <button id="sendbtn" >Send</button>
+        <div id="messagebox"></div>
+   
+   <script>  
+   var sendbtn=document.getElementById("sendbtn")
+   var inputbox=document.getElementById("inputbox")
+   sendbtn.addEventListener('click',function(){
+
+    socket.emit("get-message",inputbox.value,name)
+    var msgbox=document.getElementById("messagebox");  
+    var para=document.createElement("p")
+    para.innerText="You : "+inputbox.value
+    msgbox.appendChild(para)
+    console.log("msg send")
+
+
+   })
+socket.on("user-joined",function(msg){
+
+
+    var msgbox=document.getElementById("messagebox");  
+    var para=document.createElement("p")
+    para.innerText=msg+" join ed chat"
+    msgbox.appendChild(para)
+})
+socket.on("rcv-msg",function(msg,name){
+
+
+var msgbox=document.getElementById("messagebox");  
+var para=document.createElement("p")
+para.innerText=name+": "+msg
+msgbox.appendChild(para)
+})
+
+
+</script>
+</body>
+</html>
